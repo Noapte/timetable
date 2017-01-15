@@ -1,24 +1,15 @@
-<table>
-  <tr>
-
-  </tr>
-  <tr>
-    <td>
-
-    </td>
-  </tr>
-</table>
-
-
 <div class="container">
   <table class="table table-striped">
     <tbody>
     <tr style="width:130px">
-      <td><input class="form-control" placeholder='[wybierz salon]' ng-model="$ctrl.salonName" type="text"> </input>
-      </td>
+      <th><input class="form-control" placeholder='[wybierz salon]' ng-model="$ctrl.salonName" type="text"> </input>
+      </th>
+      <th style='vertical-align: bottom; width:10px;' rowspan="3"> D</th>
+      <th ng-repeat="i in $ctrl.employees track by $index" colspan="4"> Pracownik</th>
     </tr>
-    <tr style="width:130px">
-      <td>
+    <tr style="width:140px">
+
+      <th>
         <div style="width:130px" class="dropdown">
           <button style="width:130px" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
             {{$ctrl.selected}}
@@ -27,64 +18,51 @@
             <li ng-click='$ctrl.ble(month)' ng-repeat="month in $ctrl.months"><a href="#">{{month}}</a></li>
           </ul>
         </div>
+      </th>
+      <th ng-repeat="i in $ctrl.employees track by $index" colspan="4"> {{i.id}}</th>
+    </tr>
+    <tr>
+      <th><input ng-change='$ctrl.changeYear()' class="form-control" ng-model="$ctrl.year"
+                 type="number"> </input>
+      </th>
+
+      <th ng-repeat-start="i in $ctrl.employees track by $index">
+        od
+      </th>
+      <th> do</th>
+      <th> H</th>
+      <th ng-repeat-end>
+        Podpis
+      </th>
+    </tr>
+    <tr ng-repeat='i in $ctrl.numberOfDays track by $index'>
+      <td>{{i}}</td>
+      <td>{{$index +1}}</td>
+      <td ng-repeat-start="emp in $ctrl.employees track by $index">
+        <input ng-change="$ctrl.countSum(emp, $parent.$index)" ng-model='emp.from[$parent.$index]'
+               class="form-control-hours" min="0" max="23" type="number"> </input></td>
+      <td><input ng-change="$ctrl.countSum(emp, $parent.$index)" ng-model='emp.to[$parent.$index]' min="0" max="23"
+                 class="form-control-hours" type="number"> </input></td>
+      <td>{{emp.sum[$parent.$index]}}</td>
+      <td ng-repeat-end><span ng-if="!emp.sum[$parent.$index]">X</span></td>
+    </tr>
+    <tr>
+      <td colspan="2">H/m-c:</td>
+      <td colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
+        Suma H
       </td>
     </tr>
     <tr>
-      <td><input ng-change='$ctrl.changeYear()' class="form-control"  ng-model="$ctrl.year"
-                 type="number"> </input>
+      <td colspan="2">{{$ctrl.hoursPerMonth}}</td>
+      <td colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
+        {{emp.totalSum}}
       </td>
     </tr>
+    <tr>
+      <td colspan="2">Pozostało H:</td>
+      <td  colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
+        {{emp.totalSum - $ctrl.hoursPerMonth }}
+      </td>
+
+    </tr>
     </tbody>
-
-    <table ng-model="$ctrl.names">
-      <tr ng-repeat="x in $ctrl.names | orderBy : 'Country'">
-        <td>{{ x.Name }}</td>
-        <td>{{ x.Country }}</td>
-        <td><input class="form-control" ng-change="$ctrl.ble($ctrl.names)" ng-model="x.number" type="number"> </input>
-        </td>
-        <!--<td>fff: {{x.number}}</td>-->
-      </tr>
-    </table>
-
-
-
-
-    <!--<div class="finder">-->
-    <!--<h1>Find flight</h1>-->
-    <!--From:-->
-    <!--<input type="text" ng-model-options="{ debounce: 1000 }"-->
-    <!--ng-change="$ctrl.validate($ctrl.selectStart.model)"-->
-
-    <!--list="possibleStart" placeholder="Country,city or airport"-->
-    <!--ng-model="$ctrl.selectStart.model"/>-->
-    <!--<datalist id="possibleStart">-->
-    <!--<option ng-repeat="option in $ctrl.selectStart.availableOptions" value="{{option.name}}">-->
-    <!--</datalist>-->
-
-    <!--To:-->
-    <!--<input type="text" ng-model-options="{ debounce: 1000 }"-->
-    <!--list="possibleEnd" placeholder="Country,city or airport"-->
-    <!--ng-model="$ctrl.selectEnd.model"/>-->
-    <!--<datalist id="possibleEnd">-->
-    <!--<option ng-repeat="option in $ctrl.selectEnd.availableOptions" value="{{option.name}}">-->
-    <!--</datalist>-->
-
-    <!--Date from:-->
-    <!--<input type="date" ng-model="$ctrl.startDate"-->
-    <!--placeholder="yyyy-MM-dd"/>-->
-    <!--Date to:-->
-    <!--<input type="date" ng-model="$ctrl.endDate"-->
-    <!--placeholder="yyyy-MM-dd"/>-->
-    <!--<button ng-click="$ctrl.find()"-->
-    <!--ng-disabled="!($ctrl.startDate && $ctrl.endDate && $ctrl.selectEnd.model && $ctrl.selectStart.model)">Find-->
-    <!--flight-->
-    <!--</button>-->
-    <!--<br/>-->
-    <!--<br/>-->
-    <!--<div>-->
-    <!--<textarea ng-list="&#10;"-->
-    <!--class="console ng-pristine ng-valid ng-not-empty ng-touched"-->
-    <!--ng-trim="false" readonly="" rows="15" ng-model="$ctrl.logs"></textarea>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
