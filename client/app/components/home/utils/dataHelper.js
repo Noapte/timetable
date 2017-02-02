@@ -26,7 +26,14 @@ function isWeekend(day) {
 }
 function countHolidays(daysList) {
     return daysList.reduce((previousValue, currentValue)=> {
-        const val = (currentValue.isHoliday) ? previousValue + 1 : previousValue;
+        const val = (currentValue.isHoliday && currentValue.day !== 'niedziela') ? previousValue + 1 : previousValue;
+        return val;
+    }, 0);
+}
+
+function countWorkdays(daysList) {
+    return daysList.reduce((previousValue, currentValue)=> {
+        const val = (!isWeekend(currentValue.day)) ? previousValue + 1 : previousValue;
         return val;
     }, 0);
 }
@@ -34,5 +41,6 @@ export  {
     months,
     daysOfWeek,
     isWeekend,
-    countHolidays
+    countHolidays,
+    countWorkdays
 };

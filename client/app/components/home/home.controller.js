@@ -22,8 +22,9 @@ class HomeController {
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
         vm.employees = employees;
         vm.selected = vm.months[new Date().getMonth()];
-        vm.hoursPerMonth = 160;
         vm.year = new Date().getFullYear();
+        setDateMap();
+        vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         vm.add = add;
         vm.countSum = countSum;
         vm.exportExcel = exportExcel;
@@ -33,11 +34,10 @@ class HomeController {
         vm.setRowStyle = setRowStyle;
         vm.setHoliday = setHoliday;
 
-        setDateMap();
 
         function setHoliday(index) {
-            vm.numberOfDays[index].isHoliday = true;
-            vm.hoursPerMonth = 160 - dataHelpers.countHolidays(vm.numberOfDays)*8;
+            vm.numberOfDays[index].isHoliday = !vm.numberOfDays[index].isHoliday;
+            vm.hoursPerMonth = (dataHelpers.countWorkdays(vm.numberOfDays) - dataHelpers.countHolidays(vm.numberOfDays)) * 8;
         }
 
         function setRowStyle(i) {
@@ -51,6 +51,7 @@ class HomeController {
             vm.selected = name;
             cleanUp();
             setDateMap();
+            vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
 
         function add() {
@@ -104,6 +105,7 @@ class HomeController {
         function changeYear() {
             cleanUp();
             setDateMap();
+            vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
 
         function cleanUp() {
