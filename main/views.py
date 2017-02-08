@@ -7,8 +7,8 @@ from flask_admin import AdminIndexView, BaseView, expose
 from flask_admin.contrib import sqla
 from flask_security import current_user
 
-from . import app
-from models import User
+from . import app, db
+from models import User, Timetable
 
 
 class AdminLoginIndexView(AdminIndexView):
@@ -53,6 +53,20 @@ class AdminTimetableView(BaseView):
             "employees": employees,
             "currentShop": current_shop.to_json(),
             "availableShops": [shop.to_json() for shop in shops]})
+
+    @expose('/add', methods=('GET', 'POST'))
+    def add_table(self):
+        shop = request.form.get("shop", 1)
+        year = request.form.get("year", 2017)
+        month = request.form.get("month", 1)
+        payload = request.form.get("json", "{}")
+
+        try:
+            db.session.add(Timetable(year=year, month=month, json=payload, shop_id=shop))
+            db.session.commit()
+            return json.dumps({"status": "OK"})
+        except Exception, e:
+            return json.dumps({"error": str(e)}), 500
 
 
 class AdminModelView(sqla.ModelView):
