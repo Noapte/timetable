@@ -25,7 +25,7 @@ security = Security(app, user_datastore, login_form=forms.ExtendedLoginForm)
 
 admin = Admin(
     app,
-    'Militaria.pl',
+    'Shop.pl',
     index_view=views.AdminLoginIndexView(),
     base_template='base.html',
     template_mode='bootstrap3'
