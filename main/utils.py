@@ -53,7 +53,7 @@ def build_db():
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
-                email=username + u"@militaria.pl",
+                email=username + u"@Shop.pl",
                 password=encrypt_password(username),
                 roles=[role],
                 shops=[shop]

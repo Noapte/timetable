@@ -6,3 +6,7 @@ main/timetable/node_modules
 .settings
 *.log
 main/timetable/dist/
+main/static/app.bundle.js.map
+main/static/index.html
+main/static/vendor.bundle.js.map
+
