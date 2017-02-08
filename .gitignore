@@ -2,7 +2,7 @@
 .tmp
 .git
 .idea
-node_modules
+timetable/node_modules
 .settings
 *.log
-dist/
+timetable/dist/
