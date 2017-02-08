@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from grafik import app
+from main import app
 
 
 if __name__ == '__main__':

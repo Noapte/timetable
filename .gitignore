@@ -6,3 +6,4 @@ main/timetable/node_modules
 .settings
 *.log
 main/timetable/dist/
+*.pyc
