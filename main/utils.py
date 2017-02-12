@@ -65,6 +65,7 @@ def build_db():
             first_name='Admin',
             email='webapplicationmailservice@gmail.com',
             password=encrypt_password('admin'),
-            roles=[roles[0]]
+            roles=[roles[0]],
+            shops=[wr_bielany, wr_olawska]
         )
         db.session.commit()

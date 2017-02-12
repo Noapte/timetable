@@ -1,0 +1,85 @@
+{% extends 'admin/master.html' %}
+{{ super() }}
+
+{% block body %}
+
+<form action="" method="POST" role="form" class="admin-form form-horizontal" enctype="multipart/form-data">
+    
+    <div class="form-group">
+        <label for="shop" class="col-md-2 control-label">Shop&nbsp;</label>
+        <div class="col-md-10">
+            <input class="form-control" id="shop" name="shop" type="text" value=""> 
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="year" class="col-md-2 control-label">Year&nbsp;</label>
+        <div class="col-md-10">
+            <input class="form-control" id="year" name="year" type="text" value="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="month" class="col-md-2 control-label">Month&nbsp;</label>
+        <div class="col-md-10">
+            <input class="form-control" id="month" name="month" type="text" value="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="json" class="col-md-2 control-label">Json&nbsp;</label>
+        <div class="col-md-10">
+            <input class="form-control" id="json" name="json" type="text" value="">
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 submit-row">
+            <input id="_get" class="btn btn-default" value="Get" />
+            <input id="_update" class="btn btn-default" value="Update" />
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 submit-row">
+            <textarea id="result" class="form-control" rows="9"></textarea>
+        </div>
+    </div>
+    
+</form>
+
+
+
+{% endblock body %}
+
+{% block tail %}
+<script type="text/javascript">
+
+function getTable() {
+    var posting = $.post("/admin/table/get", {year: $("#year").val(), month: $("#month").val(), shop: $("#shop").val()})
+        .done(function(result) {
+            $("#result").empty().append(result);
+        })
+        .fail(function(xhr, status, error) {
+            $("#result").empty().append(xhr.responseText);
+        });
+};
+
+function updateTable() {
+    var posting = $.post("/admin/table/update", {json: $("#json").val(), year: $("#year").val(), month: $("#month").val(), shop: $("#shop").val()})
+        .done(function(result) {
+            $("#result").empty().append(result);
+        })
+        .fail(function(xhr, status, error) {
+            $("#result").empty().append(xhr.responseText);
+        });
+};
+
+$("#_update").click(updateTable);
+$("#_get").click(getTable);
+
+
+</script>
+{% endblock tail %}
