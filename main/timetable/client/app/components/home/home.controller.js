@@ -32,6 +32,11 @@ class HomeController {
                 console.log(resp)
             });
 
+        $http.post('http://localhost:5000/admin/table/add', {shop:'1',year, 2017,  month, 1,json: {}})
+            .then(function (resp) {
+                console.log(resp)
+            });
+
         vm.months = dataHelpers.months;
         vm.daysOfWeek = dataHelpers.daysOfWeek;
         vm.numberOfDays = [];

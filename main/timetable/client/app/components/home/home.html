@@ -117,89 +117,89 @@
         </tr>
         </tbody>
     </table>
-    <div id="toPrint" ng-show='false'>
-        <table>
-            <tbody>
-            <tr>
-                <th ng-style="$ctrl.printStyle">{{$ctrl.salonName}}</th>
-                <th ng-style="$ctrl.printStyle" rowspan="3"> D</th>
-                <th ng-style="$ctrl.printStyle" ng-repeat="i in $ctrl.employees track by $index" colspan="4">
-                    Pracownik
-                </th>
-            </tr>
-            <tr>
-                <th ng-style="$ctrl.printStyle"> {{$ctrl.selected}}</th>
-                <th ng-style="$ctrl.printStyle" ng-repeat="i in $ctrl.employees track by $index" colspan="4">
-                    {{i.id}}
-                </th>
-            </tr>
-            <tr>
-                <th ng-style="$ctrl.printStyle">{{$ctrl.year}}</th>
-                <th ng-style="$ctrl.printStyle" ng-repeat-start="i in $ctrl.employees track by $index">
-                    od
-                </th>
-                <th ng-style="$ctrl.printStyle"> do</th>
-                <th ng-style="$ctrl.printStyle"> H</th>
-                <th ng-style="$ctrl.printStyle" ng-repeat-end>
-                    Podpis
-                </th>
-            </tr>
-            <tr ng-repeat='i in $ctrl.numberOfDays track by $index'>
-                <td ng-style="$ctrl.printStyle">{{i.day}}</td>
-                <td ng-style="$ctrl.printStyle">{{$index +1}}</td>
-                <td ng-style="$ctrl.printStyle" ng-repeat-start="emp in $ctrl.employees track by $index">
-                    {{emp.from[$parent.$index]}}
-                </td>
-                <td ng-style="$ctrl.printStyle">{{emp.to[$parent.$index]}}</td>
-                <td ng-style="$ctrl.printStyle">{{emp.sum[$parent.$index]}}</td>
-                <td ng-style="$ctrl.printStyle" ng-repeat-end><span ng-if="!emp.sum[$parent.$index]">X</span></td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="2">H/m-c:</td>
-                <td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
-                    Suma H
-                </td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="2">{{$ctrl.hoursPerMonth}}</td>
-                <td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
-                    {{emp.totalSum}}
-                </td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="2">Pozostało H:</td>
-                <td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">
-                    {{emp.totalSum - $ctrl.hoursPerMonth }}
-                </td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="6" style="text-align: left;padding-left:10px">Legenda:</td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:red">DUW</td>
-                <td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- dni ustawowo
-                    wolne
-                </td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:yellow">ZW</td>
-                <td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- zadeklarowane
-                    wolne
-                </td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:#D3D3D3"></td>
-                <td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">weekend</td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:hotpink">U</td>
-                <td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- urlop</td>
-            </tr>
-            <tr>
-                <td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:green">L4</td>
-                <td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">/- L4</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <!--<div id="toPrint" ng-show='false'>-->
+        <!--<table>-->
+            <!--<tbody>-->
+            <!--<tr>-->
+                <!--<th ng-style="$ctrl.printStyle">{{$ctrl.salonName}}</th>-->
+                <!--<th ng-style="$ctrl.printStyle" rowspan="3"> D</th>-->
+                <!--<th ng-style="$ctrl.printStyle" ng-repeat="i in $ctrl.employees track by $index" colspan="4">-->
+                    <!--Pracownik-->
+                <!--</th>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<th ng-style="$ctrl.printStyle"> {{$ctrl.selected}}</th>-->
+                <!--<th ng-style="$ctrl.printStyle" ng-repeat="i in $ctrl.employees track by $index" colspan="4">-->
+                    <!--{{i.id}}-->
+                <!--</th>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<th ng-style="$ctrl.printStyle">{{$ctrl.year}}</th>-->
+                <!--<th ng-style="$ctrl.printStyle" ng-repeat-start="i in $ctrl.employees track by $index">-->
+                    <!--od-->
+                <!--</th>-->
+                <!--<th ng-style="$ctrl.printStyle"> do</th>-->
+                <!--<th ng-style="$ctrl.printStyle"> H</th>-->
+                <!--<th ng-style="$ctrl.printStyle" ng-repeat-end>-->
+                    <!--Podpis-->
+                <!--</th>-->
+            <!--</tr>-->
+            <!--<tr ng-repeat='i in $ctrl.numberOfDays track by $index'>-->
+                <!--<td ng-style="$ctrl.printStyle">{{i.day}}</td>-->
+                <!--<td ng-style="$ctrl.printStyle">{{$index +1}}</td>-->
+                <!--<td ng-style="$ctrl.printStyle" ng-repeat-start="emp in $ctrl.employees track by $index">-->
+                    <!--{{emp.from[$parent.$index]}}-->
+                <!--</td>-->
+                <!--<td ng-style="$ctrl.printStyle">{{emp.to[$parent.$index]}}</td>-->
+                <!--<td ng-style="$ctrl.printStyle">{{emp.sum[$parent.$index]}}</td>-->
+                <!--<td ng-style="$ctrl.printStyle" ng-repeat-end><span ng-if="!emp.sum[$parent.$index]">X</span></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="2">H/m-c:</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">-->
+                    <!--Suma H-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="2">{{$ctrl.hoursPerMonth}}</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">-->
+                    <!--{{emp.totalSum}}-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="2">Pozostało H:</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="4" ng-repeat="emp in $ctrl.employees track by $index">-->
+                    <!--{{emp.totalSum - $ctrl.hoursPerMonth }}-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="6" style="text-align: left;padding-left:10px">Legenda:</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:red">DUW</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- dni ustawowo-->
+                    <!--wolne-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:yellow">ZW</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- zadeklarowane-->
+                    <!--wolne-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:#D3D3D3"></td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">weekend</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:hotpink">U</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">- urlop</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="1" style="text-align: center;background-color:green">L4</td>-->
+                <!--<td ng-style="$ctrl.printStyle" colspan="5" style="text-align: left;padding-left:10px">/- L4</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
 </div>
