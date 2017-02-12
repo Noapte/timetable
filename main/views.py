@@ -44,7 +44,6 @@ class AdminTimetableView(BaseView):
             try:
                 return method(self, *args, **kwargs)
             except Exception, e:
-                raise
                 return json.dumps(str(e)), 500
         return _wrap
 
@@ -92,7 +91,7 @@ class AdminTimetableView(BaseView):
         else:
             db.session.add(Timetable(year=year, month=month, json=payload, shop_id=shop.id))
         db.session.commit()
-        return self._serialize(starus="OK")
+        return self._serialize(status="OK")
 
     def _get_shops(self):
         available_shops = current_user.shops
