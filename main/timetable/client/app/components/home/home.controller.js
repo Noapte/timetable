@@ -25,7 +25,6 @@ class HomeController {
         vm.year = new Date().getFullYear();
         setDateMap();
         vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
-        vm.add = add;
         vm.countSum = countSum;
         vm.exportExcel = exportExcel;
         vm.printFile = printFile;
@@ -52,10 +51,6 @@ class HomeController {
             cleanUp();
             setDateMap();
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
-        }
-
-        function add() {
-            vm.employees.push(new Employee(''));
         }
 
         function daysInMonth(month, year) {
