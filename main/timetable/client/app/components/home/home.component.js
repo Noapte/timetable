@@ -6,7 +6,7 @@ let homeComponent = {
     restrict: 'E',
     bindings: {},
     template,
-    controller: ['$scope','FileSaver', controller]
+    controller: ['$scope', '$http', 'FileSaver', controller]
 };
 
 export default homeComponent;
