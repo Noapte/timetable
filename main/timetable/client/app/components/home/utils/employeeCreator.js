@@ -1,6 +1,7 @@
 class Employee {
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
         this.from = null;
         this.to = null;
         this.sum = [];

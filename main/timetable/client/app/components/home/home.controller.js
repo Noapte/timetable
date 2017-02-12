@@ -13,8 +13,25 @@ const employees = [
 
 class HomeController {
 
-    constructor($scope, fileSaver) {
+    constructor($scope, $http, fileSaver) {
+
         var vm = this;
+        vm.currentShop = '';
+        vm.availableShops = [];
+        vm.employees = [];
+
+        $http.get('http://localhost:5000/admin/table/get')
+            .then(function (resp) {
+                vm.currentShop = resp.data.currentShop.name;
+                vm.employees = _.map(resp.data.employees, employee => {
+                    return new Employee(employee.id, employee.name);
+                });
+                vm.availableShops = _.map(resp.data.availableShops, shop => {
+                    return shop.name;
+                });
+                console.log(resp)
+            });
+
         vm.months = dataHelpers.months;
         vm.daysOfWeek = dataHelpers.daysOfWeek;
         vm.numberOfDays = [];
@@ -29,6 +46,7 @@ class HomeController {
         vm.exportExcel = exportExcel;
         vm.printFile = printFile;
         vm.changeMonth = changeMonth;
+        vm.changeShop = changeShop;
         vm.changeYear = changeYear;
         vm.setRowStyle = setRowStyle;
         vm.setHoliday = setHoliday;
@@ -51,6 +69,12 @@ class HomeController {
             cleanUp();
             setDateMap();
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
+        }
+
+        function changeShop(name) {
+            vm.currentShop = name;
+            cleanUp();
+            setDateMap();
         }
 
         function daysInMonth(month, year) {
