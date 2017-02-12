@@ -2,15 +2,6 @@ import * as _ from 'lodash';
 import * as dataHelpers from './utils/dataHelper';
 import Employee from './utils/employeeCreator';
 
-const employees = [
-    new Employee('1'),
-    new Employee('2'),
-    new Employee('3'),
-    new Employee('4'),
-    new Employee('5'),
-    new Employee('6')
-];
-
 class HomeController {
 
     constructor($scope, $http, fileSaver) {
@@ -21,7 +12,7 @@ class HomeController {
         vm.employees = [];
 
         $http.get('http://localhost:5000/admin/table/get')
-            .then(function (resp) {
+            .then((resp) => {
                 vm.currentShop = resp.data.currentShop.name;
                 vm.employees = _.map(resp.data.employees, employee => {
                     return new Employee(employee.id, employee.name);
@@ -29,12 +20,22 @@ class HomeController {
                 vm.availableShops = _.map(resp.data.availableShops, shop => {
                     return shop.name;
                 });
-                console.log(resp)
+            })
+            .catch(err => {
+                vm.currentShop = 'Wroclaw Bielany';
+                vm.employees = [
+                    new Employee('1', 'ble'),
+                    new Employee('2', 'blaaah'),
+                    new Employee('3', 'Jan'),
+                    new Employee('4', 'ble'),
+                    new Employee('5', 'ble'),
+                    new Employee('6', 'ble')
+                ];
+                vm.availableShops = ['Wroclaw Bielany', 'Wroclaw Oławska'];
             });
 
-        $http.post('http://localhost:5000/admin/table/add', {shop:'1',year, 2017,  month, 1,json: {}})
+        $http.post('http://localhost:5000/admin/table/add', {shop: 1, year: 2017, month: 1, json: {}})
             .then(function (resp) {
-                console.log(resp)
             });
 
         vm.months = dataHelpers.months;
@@ -42,7 +43,7 @@ class HomeController {
         vm.numberOfDays = [];
         vm.print = true;
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
-        vm.employees = employees;
+
         vm.selected = vm.months[new Date().getMonth()];
         vm.year = new Date().getFullYear();
         setDateMap();
