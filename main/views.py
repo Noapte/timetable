@@ -60,18 +60,18 @@ class AdminTimetableView(BaseView):
     @expose('/get', methods=('GET', 'POST'))
     @ajax_exception_handler
     def get_table(self):
-        now = datetime.datetime.now()
-        year = request.form.get("year", now.year)
-        month = request.form.get("month", now.month)
-
         current_shop, available_shops = self._get_shops()
 
         employees = [u.to_json() for u in User.query.filter(User.shops.any(id=current_shop.id)).all()]
-        timetable = self._get_timetable(current_shop.id, year, month)
-        payload = None if not timetable else timetable.json
+        schedule = {}
+        for timetable in Timetable.query.filter(Timetable.shop_id == current_shop.id).all():
+            if timetable.year in schedule:
+                schedule[timetable.year][timetable.month] = timetable.json
+            else:
+                schedule[timetable.year] = {timetable.month: timetable.json}
 
         return self._serialize(
-            json=payload,
+            schedule=schedule,
             employees=employees,
             currentShop=current_shop.to_json(),
             availableShops=[shop.to_json() for shop in available_shops])
