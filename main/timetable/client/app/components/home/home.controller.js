@@ -4,7 +4,7 @@ import Employee from './utils/employeeCreator';
 
 class HomeController {
 
-    constructor($scope, $http, fileSaver) {
+    constructor($scope, $http, $httpParamSerializerJQLike, fileSaver) {
 
         var vm = this;
         vm.currentShop = '';
@@ -13,6 +13,7 @@ class HomeController {
 
         $http.get('http://localhost:5000/admin/table/get')
             .then((resp) => {
+                console.log(resp.data)
                 vm.currentShop = resp.data.currentShop.name;
                 vm.employees = _.map(resp.data.employees, employee => {
                     return new Employee(employee.id, employee.name);
@@ -34,9 +35,24 @@ class HomeController {
                 vm.availableShops = ['Wroclaw Bielany', 'Wroclaw Oławska'];
             });
 
-        $http.post('http://localhost:5000/admin/table/add', {shop: 1, year: 2017, month: 1, json: {}})
-            .then(function (resp) {
+        vm.save = save;
+
+        function save() {
+            $http({
+                url: 'http://localhost:5000/admin/table/update',
+                method: "POST",
+                data: $httpParamSerializerJQLike({
+                    'json': '{a: 2}',
+                    'year': vm.year,
+                    'month': _.indexOf(vm.months, vm.selected),
+                    'shop': 1
+                }),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(function (resp) {
+                console.log(vm.employees)
+                console.log(resp)
             });
+        }
 
         vm.months = dataHelpers.months;
         vm.daysOfWeek = dataHelpers.daysOfWeek;

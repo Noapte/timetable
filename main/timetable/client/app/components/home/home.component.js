@@ -6,7 +6,7 @@ let homeComponent = {
     restrict: 'E',
     bindings: {},
     template,
-    controller: ['$scope', '$http', 'FileSaver', controller]
+    controller: ['$scope', '$http', '$httpParamSerializerJQLike', 'FileSaver', controller]
 };
 
 export default homeComponent;
