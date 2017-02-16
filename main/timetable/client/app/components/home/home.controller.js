@@ -45,7 +45,13 @@ class HomeController {
 
         function changeMonth(name) {
             vm.selected = name;
-            cleanUp();
+            if (scheduleExist()) {
+                const schedule = vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)];
+                vm.employees = _.isString(schedule) ? JSON.parse(schedule) : schedule;
+            }
+            else {
+                cleanUp();
+            }
             setDateMap();
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
@@ -83,19 +89,18 @@ class HomeController {
         function loadCurrentTimetableData() {
             $http.get('http://localhost:5000/admin/table/get')
                 .then((resp) => {
-                    console.log(resp)
                     vm.currentShop = resp.data.currentShop.name;
                     vm.availableSchedules = resp.data.schedule;
                     vm.availableShops = _.map(resp.data.availableShops, shop => {
                         return shop.name;
                     });
-                //    if (vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+                    if (vm.availableSchedules && vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+
+                        vm.employees = JSON.parse(vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]);
+                    else
                         vm.employees = _.map(resp.data.employees, employee => {
                             return new Employee(employee.id, employee.name);
                         });
-                    // else
-                    //     vm.employees = vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)];
-
                 })
                 .catch(err => {
                     console.log(err);
@@ -123,7 +128,15 @@ class HomeController {
         }
 
         function changeYear() {
-            cleanUp();
+
+            if (scheduleExist()) {
+                const schedule = vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)];
+                vm.employees = _.isString(schedule) ? JSON.parse(schedule) : schedule;
+            }
+            else {
+                cleanUp();
+            }
+
             setDateMap();
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
@@ -137,20 +150,42 @@ class HomeController {
             })
         }
 
+        function scheduleExist() {
+            vm.availableSchedules = vm.availableSchedules || {};
+            if (vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]) {
+                console.log(vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+                return true;
+            }
+
+            return false;
+        }
+
         function save() {
-            vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)] = vm.employees;
+            vm.availableSchedules = vm.availableSchedules || {};
+            if (vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]) {
+                vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)] = vm.employees;
+            }
+
+            else {
+                if (vm.availableSchedules[vm.year]) {
+                    vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)] = vm.employees;
+                }
+                else {
+                    vm.availableSchedules[vm.year] = {};
+                    vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)] = vm.employees;
+                }
+            }
             $http({
                 url: 'http://localhost:5000/admin/table/update',
                 method: "POST",
                 data: $httpParamSerializerJQLike({
-                    'json': JSON.stringify(vm.availableSchedules),
+                    'json': JSON.stringify(vm.employees),
                     'year': vm.year,
                     'month': _.indexOf(vm.months, vm.selected),
                     'shop': vm.currentShop.id
                 }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function (resp) {
-                console.log(vm.employees)
                 console.log(resp)
             });
         }
