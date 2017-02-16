@@ -3,67 +3,25 @@ import * as dataHelpers from './utils/dataHelper';
 import Employee from './utils/employeeCreator';
 
 class HomeController {
-
     constructor($scope, $http, $httpParamSerializerJQLike, fileSaver) {
-
         var vm = this;
         vm.currentShop = '';
         vm.availableShops = [];
         vm.employees = [];
-
-        $http.get('http://localhost:5000/admin/table/get')
-            .then((resp) => {
-                console.log(resp.data)
-                vm.currentShop = resp.data.currentShop.name;
-                vm.employees = _.map(resp.data.employees, employee => {
-                    return new Employee(employee.id, employee.name);
-                });
-                vm.availableShops = _.map(resp.data.availableShops, shop => {
-                    return shop.name;
-                });
-            })
-            .catch(err => {
-                vm.currentShop = 'Wroclaw Bielany';
-                vm.employees = [
-                    new Employee('1', 'ble'),
-                    new Employee('2', 'blaaah'),
-                    new Employee('3', 'Jan'),
-                    new Employee('4', 'ble'),
-                    new Employee('5', 'ble'),
-                    new Employee('6', 'ble')
-                ];
-                vm.availableShops = ['Wroclaw Bielany', 'Wroclaw Oławska'];
-            });
-
-        vm.save = save;
-
-        function save() {
-            $http({
-                url: 'http://localhost:5000/admin/table/update',
-                method: "POST",
-                data: $httpParamSerializerJQLike({
-                    'json': '{a: 2}',
-                    'year': vm.year,
-                    'month': _.indexOf(vm.months, vm.selected),
-                    'shop': 1
-                }),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).then(function (resp) {
-                console.log(vm.employees)
-                console.log(resp)
-            });
-        }
-
+        vm.availableSchedules = {};
         vm.months = dataHelpers.months;
+        vm.selected = vm.months[new Date().getMonth()];
+        vm.year = new Date().getFullYear();
         vm.daysOfWeek = dataHelpers.daysOfWeek;
         vm.numberOfDays = [];
         vm.print = true;
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
-
-        vm.selected = vm.months[new Date().getMonth()];
-        vm.year = new Date().getFullYear();
-        setDateMap();
         vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
+
+        setDateMap();
+        loadCurrentTimetableData();
+
+        vm.save = save;
         vm.countSum = countSum;
         vm.exportExcel = exportExcel;
         vm.printFile = printFile;
@@ -72,7 +30,6 @@ class HomeController {
         vm.changeYear = changeYear;
         vm.setRowStyle = setRowStyle;
         vm.setHoliday = setHoliday;
-
 
         function setHoliday(index) {
             vm.numberOfDays[index].isHoliday = !vm.numberOfDays[index].isHoliday;
@@ -123,6 +80,28 @@ class HomeController {
             printWin.close();
         }
 
+        function loadCurrentTimetableData() {
+            $http.get('http://localhost:5000/admin/table/get')
+                .then((resp) => {
+                    console.log(resp)
+                    vm.currentShop = resp.data.currentShop.name;
+                    vm.availableSchedules = resp.data.schedule;
+                    vm.availableShops = _.map(resp.data.availableShops, shop => {
+                        return shop.name;
+                    });
+                //    if (vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+                        vm.employees = _.map(resp.data.employees, employee => {
+                            return new Employee(employee.id, employee.name);
+                        });
+                    // else
+                    //     vm.employees = vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)];
+
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+
         function countSum(emp, index) {
             const to = emp.to && emp.to[index] ? emp.to[index] : 0;
             const from = emp.from && emp.from[index] ? emp.from[index] : 0;
@@ -156,6 +135,24 @@ class HomeController {
                 employee.sum = [];
                 employee.totalSum = 0;
             })
+        }
+
+        function save() {
+            vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)] = vm.employees;
+            $http({
+                url: 'http://localhost:5000/admin/table/update',
+                method: "POST",
+                data: $httpParamSerializerJQLike({
+                    'json': JSON.stringify(vm.availableSchedules),
+                    'year': vm.year,
+                    'month': _.indexOf(vm.months, vm.selected),
+                    'shop': vm.currentShop.id
+                }),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(function (resp) {
+                console.log(vm.employees)
+                console.log(resp)
+            });
         }
     }
 }
