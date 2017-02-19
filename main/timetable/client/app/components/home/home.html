@@ -6,11 +6,11 @@
                 <div style="width:130px" class="dropdown">
                     <button style="width:130px" class="btn btn-default dropdown-toggle" type="button"
                             data-toggle="dropdown">
-                        {{$ctrl.currentShop}}
+                        {{$ctrl.currentShop.name}}
                     </button>
                     <ul style="width:130px" class="dropdown-menu" ng-model="$ctrl.availableShops">
                         <li ng-click='$ctrl.changeShop(shop)' ng-repeat="shop in $ctrl.availableShops"><a
-                                href="#">{{shop}}</a></li>
+                                href="#">{{shop.name}}</a></li>
                     </ul>
                 </div>
             </th>
@@ -125,7 +125,7 @@
         <table>
             <tbody>
             <tr>
-                <th ng-style="$ctrl.printStyle">{{$ctrl.currentShop}}</th>
+                <th ng-style="$ctrl.printStyle">{{$ctrl.currentShop.name}}</th>
                 <th ng-style="$ctrl.printStyle" rowspan="3"> D</th>
                 <th ng-style="$ctrl.printStyle" ng-repeat="i in $ctrl.employees track by $index" colspan="4">
                     Pracownik

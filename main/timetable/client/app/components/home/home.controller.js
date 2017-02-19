@@ -5,7 +5,7 @@ import Employee from './utils/employeeCreator';
 class HomeController {
     constructor($scope, $http, $httpParamSerializerJQLike, fileSaver) {
         var vm = this;
-        vm.currentShop = '';
+        vm.currentShop = null;
         vm.availableShops = [];
         vm.employees = [];
         vm.availableSchedules = {};
@@ -19,7 +19,7 @@ class HomeController {
         vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
 
         setDateMap();
-        loadCurrentTimetableData();
+        loadCurrentTimetableData('');
 
         vm.save = save;
         vm.countSum = countSum;
@@ -56,10 +56,8 @@ class HomeController {
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
 
-        function changeShop(name) {
-            vm.currentShop = name;
-            cleanUp();
-            setDateMap();
+        function changeShop(shop) {
+            loadCurrentTimetableData(shop.id);
         }
 
         function daysInMonth(month, year) {
@@ -86,22 +84,27 @@ class HomeController {
             printWin.close();
         }
 
-        function loadCurrentTimetableData() {
-            $http.get('http://localhost:5000/admin/table/get')
-                .then((resp) => {
-                    vm.currentShop = resp.data.currentShop.name;
-                    vm.availableSchedules = resp.data.schedule;
-                    vm.availableShops = _.map(resp.data.availableShops, shop => {
-                        return shop.name;
-                    });
-                    if (vm.availableSchedules && vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+        function loadCurrentTimetableData(shopId) {
 
-                        vm.employees = JSON.parse(vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]);
-                    else
-                        vm.employees = _.map(resp.data.employees, employee => {
-                            return new Employee(employee.id, employee.name);
-                        });
-                })
+            $http({
+                url: 'http://localhost:5000/admin/table/get',
+                method: "POST",
+                data: $httpParamSerializerJQLike({
+                    'shop': shopId
+                }),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(function (resp) {
+                vm.currentShop = resp.data.currentShop;
+                vm.availableSchedules = resp.data.schedule;
+                vm.availableShops = resp.data.availableShops;
+                if (vm.availableSchedules && vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
+
+                    vm.employees = JSON.parse(vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]);
+                else
+                    vm.employees = _.map(resp.data.employees, employee => {
+                        return new Employee(employee.id, employee.name);
+                    });
+            })
                 .catch(err => {
                     //just for testing without database
                     setMockedObjects();
@@ -110,7 +113,7 @@ class HomeController {
         }
 
         function setMockedObjects() {
-            vm.currentShop = 'Bielany Wroclaw';
+            vm.currentShop = {name: 'Bielany Wroclaw', id: 1};
             const data = [{
                 "id": 1,
                 "name": "fkiepski",
@@ -136,7 +139,7 @@ class HomeController {
             vm.employees = _.map(data, employee => {
                 return new Employee(employee.id, employee.name);
             });
-            vm.availableShops = ['Bielany Wroclaw', 'Olawska Wroclaw'];
+            vm.availableShops = [{name: 'Bielany Wroclaw', id: 1}, {name: 'Bielany2 Wroclaw', id: 1}];
         }
 
         function countSum(emp, index) {
