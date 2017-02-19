@@ -21,6 +21,9 @@ table, th, td {
 .form-control-hours {
   width:60px;
 }
+.table {
+  border: none;
+}
 
 .table > tbody > tr > th {
   padding: 0px;
@@ -62,5 +65,16 @@ th select {
   width: 100%;
   box-sizing: border-box;
 }
+/* Remove controls from Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Re-applies the controls on :hover and :focus */
+input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+
+
 
 

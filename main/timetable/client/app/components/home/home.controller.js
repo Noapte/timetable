@@ -103,8 +103,40 @@ class HomeController {
                         });
                 })
                 .catch(err => {
+                    //just for testing without database
+                    setMockedObjects();
                     console.log(err);
                 });
+        }
+
+        function setMockedObjects() {
+            vm.currentShop = 'Bielany Wroclaw';
+            const data = [{
+                "id": 1,
+                "name": "fkiepski",
+                "from": {"0": 1, "1": 1},
+                "to": {"0": 13, "1": 13},
+                "sum": [12, 12],
+                "totalSum": 24
+            }, {"id": 2, "name": "mpaździoch", "from": null, "to": null, "sum": [], "totalSum": 0}, {
+                "id": 3,
+                "name": "aboczek",
+                "from": null,
+                "to": null,
+                "sum": [],
+                "totalSum": 0
+            }, {"id": 4, "name": "wkiepski", "from": null, "to": null, "sum": [], "totalSum": 0}, {
+                "id": 5,
+                "name": "jsocha",
+                "from": null,
+                "to": null,
+                "sum": [],
+                "totalSum": 0
+            }, {"id": 11, "name": "admin", "from": null, "to": null, "sum": [], "totalSum": 0}];
+            vm.employees = _.map(data, employee => {
+                return new Employee(employee.id, employee.name);
+            });
+            vm.availableShops = ['Bielany Wroclaw', 'Olawska Wroclaw'];
         }
 
         function countSum(emp, index) {
@@ -153,10 +185,8 @@ class HomeController {
         function scheduleExist() {
             vm.availableSchedules = vm.availableSchedules || {};
             if (vm.availableSchedules[vm.year] && vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)]) {
-                console.log(vm.availableSchedules[vm.year][_.indexOf(vm.months, vm.selected)])
                 return true;
             }
-
             return false;
         }
 
