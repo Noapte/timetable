@@ -87,7 +87,7 @@ class HomeController {
         function loadCurrentTimetableData(shopId) {
 
             $http({
-                url: 'http://localhost:5000/admin/table/get',
+                url: 'admin/table/get',
                 method: "POST",
                 data: $httpParamSerializerJQLike({
                     'shop': shopId
@@ -209,7 +209,7 @@ class HomeController {
                 }
             }
             $http({
-                url: 'http://localhost:5000/admin/table/update',
+                url: 'admin/table/update',
                 method: "POST",
                 data: $httpParamSerializerJQLike({
                     'json': JSON.stringify(vm.employees),
