@@ -6,5 +6,5 @@ main/timetable/node_modules
 .settings
 *.log
 *.pyc
-main/sample_db.sqlite
-
+config.py
+db/sample_db.sqlite
