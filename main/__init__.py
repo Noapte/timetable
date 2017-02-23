@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 
-from flask import Flask, url_for
+from flask import Flask, url_for, redirect
 from flask_admin import Admin, helpers
+from flask_babelex import Babel
 from flask_mail import Mail
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_sqlalchemy import SQLAlchemy
@@ -12,11 +13,13 @@ app.config.from_object('config')
 
 db = SQLAlchemy(app)
 mail = Mail(app)
+babel = Babel(app)
 
 
 import models
 import views
 import forms
+from timetable_view import TimetableView
 
 
 user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
@@ -31,10 +34,15 @@ admin = Admin(
     template_mode='bootstrap3'
 )
 
-admin.add_view(views.AdminTimetableView(name="Grafik", endpoint='table'))
-admin.add_view(views.AdminModelView(models.Shop, db.session))
-admin.add_view(views.AdminModelView(models.Timetable, db.session))
-admin.add_view(views.UsersView(models.User, db.session))
+admin.add_view(TimetableView())
+admin.add_view(views.ShopsView())
+admin.add_view(views.TimetablesView())
+admin.add_view(views.UsersView())
+
+
+@app.route('/')
+def index():
+    return redirect(url_for('admin.index'))
 
 
 @security.context_processor
@@ -53,4 +61,3 @@ app_dir = os.path.realpath(os.path.dirname(__file__))
 database_path = os.path.join(app_dir, app.config['DATABASE_FILE'])
 if not os.path.exists(database_path):
     utils.build_db()
-# utils.build_db()
