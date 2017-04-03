@@ -16,12 +16,13 @@ class HomeController {
         vm.numberOfDays = [];
         vm.print = true;
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
-        vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
+        vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8 - dataHelpers.countHolidays(vm.numberOfDays) * 8;
 
         setDateMap();
         loadCurrentTimetableData('');
 
         vm.save = save;
+        vm.radomize = randomize;
         vm.countSum = countSum;
         vm.exportExcel = exportExcel;
         vm.printFile = printFile;
@@ -54,6 +55,13 @@ class HomeController {
             }
             setDateMap();
             vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
+        }
+        function randomize(){
+            _.each(vm.employees, employee => {
+
+                console.log("A")
+            } )
+            
         }
 
         function changeShop(shop) {
