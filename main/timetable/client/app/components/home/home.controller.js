@@ -5,6 +5,7 @@ import Employee from './utils/employeeCreator';
 class HomeController {
     constructor($scope, $http, $httpParamSerializerJQLike, fileSaver) {
         var vm = this;
+        vm.editable = false;
         vm.currentShop = null;
         vm.availableShops = [];
         vm.employees = [];
@@ -16,13 +17,13 @@ class HomeController {
         vm.numberOfDays = [];
         vm.print = true;
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
-        vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8 - dataHelpers.countHolidays(vm.numberOfDays) * 8;
+        vm.hoursPerMonth = 0;
 
         setDateMap();
         loadCurrentTimetableData('');
 
         vm.save = save;
-        vm.radomize = randomize;
+        vm.randomize = randomize;
         vm.countSum = countSum;
         vm.exportExcel = exportExcel;
         vm.printFile = printFile;
@@ -54,14 +55,23 @@ class HomeController {
                 cleanUp();
             }
             setDateMap();
-            vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
-        function randomize(){
-            _.each(vm.employees, employee => {
 
-                console.log("A")
-            } )
-            
+        function randomize() {
+            _.each(vm.employees, employee => {
+                _.each(vm.numberOfDays, (elem, index)=> {
+                    if (!elem.isHoliday) {
+                        employee.from[index] = 8;
+                        employee.to[index] = 16;
+                        countSum(employee, index);
+                    }else {
+                        employee.from[index] = null;
+                        employee.to[index] = null;
+                        countSum(employee, index);
+                    }
+                });
+            })
+
         }
 
         function changeShop(shop) {
@@ -102,6 +112,7 @@ class HomeController {
                 }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function (resp) {
+                vm.editable = resp.data.edit;
                 vm.currentShop = resp.data.currentShop;
                 vm.availableSchedules = resp.data.schedule;
                 vm.availableShops = resp.data.availableShops;
@@ -151,8 +162,8 @@ class HomeController {
         }
 
         function countSum(emp, index) {
-            const to = emp.to && emp.to[index] ? emp.to[index] : 0;
-            const from = emp.from && emp.from[index] ? emp.from[index] : 0;
+            const to = emp.to[index] ? emp.to[index] : 0;
+            const from = emp.from[index] ? emp.from[index] : 0;
             emp.sum[index] = to - from;
             emp.totalSum = emp.sum.reduce((a, b)=> {
                 return a + b;
@@ -168,6 +179,7 @@ class HomeController {
             for (let i = 0; i < daysNumber; i++) {
                 vm.numberOfDays.push({day: `${vm.daysOfWeek[(firstDay + i) % 7]}`, isHoliday: false});
             }
+            vm.hoursPerMonth = (dataHelpers.countWorkdays(vm.numberOfDays) - dataHelpers.countHolidays(vm.numberOfDays)) * 8;
         }
 
         function changeYear() {
@@ -181,13 +193,12 @@ class HomeController {
             }
 
             setDateMap();
-            vm.hoursPerMonth = dataHelpers.countWorkdays(vm.numberOfDays) * 8;
         }
 
         function cleanUp() {
             _.each(vm.employees, employee => {
-                employee.from = null;
-                employee.to = null;
+                employee.from = [];
+                employee.to = [];
                 employee.sum = [];
                 employee.totalSum = 0;
             })
