@@ -1,5 +1,10 @@
-Flask
-Flask-Admin
-Flask-SQLAlchemy
-Flask-Security>=1.7.5
-Flask-BabelEx
+Flask==0.11.1
+Flask-Admin==1.4.2
+Flask-BabelEx==0.9.3
+Flask-Login==0.3.2
+Flask-Mail==0.9.1
+Flask-Principal==0.4.0
+Flask-SQLAlchemy==2.1
+Flask-Security==1.7.5
+Flask-WTF==0.14.2
+SQLAlchemy==1.1.5

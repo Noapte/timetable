@@ -63,6 +63,7 @@ class TimetableView(BaseView):
                 schedule[timetable.year] = {timetable.month: timetable.json}
 
         return self._serialize(
+            edit=self.is_editable(),
             schedule=schedule,
             employees=employees,
             currentShop=current_shop.to_json(),
