@@ -65,51 +65,45 @@ class HomeController {
             _.each(vm.employees, employee => {
 
                 while(employee.totalSum !== vm.hoursPerMonth){
-                    const index = getRandomWorkingDay(employee);
-                    employee.from[index] = 8;
-                    employee.to[index] = 16;
+                 //   console.log(employee.totalSum  + "  " +  vm.hoursPerMonth) ;
+
+                    const index = getRandomWorkingDay();
+                    employee.from[index] = null;
+                    employee.to[index] = null;
                     countSum(employee, index);
+
+                    const maxHoursPerDay = 10;
+                    const openHour = 8;
+                    const closeHour = 21;
+                    let open = getRandomRange(openHour, closeHour);
+                    let close = getRandomRange(openHour, closeHour);
+                    let duration  = close - open;
+                    let possibleLeftHours =  vm.hoursPerMonth - employee.totalSum - duration;
+                  //  console.log('open ' + open  + 'close ' + close + 'possible hours ' + possibleLeftHours)
+                    while(open === close  || duration <= 0 || duration > maxHoursPerDay || possibleLeftHours < 0){
+                         open = getRandomRange(openHour, closeHour);
+                         close = getRandomRange(openHour, closeHour);
+                         duration  = close - open;
+                         possibleLeftHours =   vm.hoursPerMonth - employee.totalSum - duration;
+                       // console.log('open ' + open  + 'close ' + close + 'possible hours ' + possibleLeftHours)
+
+                    }
+                   // console.log('to set ' + open  +  '  ' + close)
+                    employee.from[index] = open;
+                    employee.to[index] = close;
+                    countSum(employee, index);
+                    //console.log('left   ' + employee.totalSum)
                 }
 
 
-                // _.each(vm.numberOfDays, (elem, index)=> {
-                //     if (!elem.isHoliday) {
-                //         employee.from[index] = 8;
-                //         employee.to[index] = 16;
-                //         countSum(employee, index);
-                //     }else {
-                //         employee.from[index] = null;
-                //         employee.to[index] = null;
-                //         countSum(employee, index);
-                //     }
-                // });
             });
         }
-
-        function setRandomHours(employee){
-            const maxHoursPerDay = 10;
-            const openHour = 8;
-            const closeHour = 21;
-            let open = getRandomRange(openHour, closeHour);
-            let close = getRandomRange(openHour, closeHour);
-            let duration  = close - open;
-            let possibleLeftHours = employee.totalSum - duration;
-            while(duration <= 0 || duration > maxHoursPerDay){
-                if(employee.totalSum === 0)
-                    break;
-
-            }
-
-        }
-
-
-
-        function getRandomWorkingDay(employee){
+        function getRandomWorkingDay(){
             const numberOfDays = vm.numberOfDays.length;
             let randomDay = getRandomInt(numberOfDays);
           //  console.log(randomDay)
             //if all days are holiday break
-            while(vm.numberOfDays[randomDay].isHoliday || employee.from[randomDay]){
+            while(vm.numberOfDays[randomDay].isHoliday){
                 randomDay = getRandomInt(numberOfDays);
               //  console.log(randomDay)
             }
