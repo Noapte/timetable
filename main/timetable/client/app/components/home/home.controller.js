@@ -57,21 +57,72 @@ class HomeController {
             setDateMap();
         }
 
-        function randomize() {
-            _.each(vm.employees, employee => {
-                _.each(vm.numberOfDays, (elem, index)=> {
-                    if (!elem.isHoliday) {
-                        employee.from[index] = 8;
-                        employee.to[index] = 16;
-                        countSum(employee, index);
-                    }else {
-                        employee.from[index] = null;
-                        employee.to[index] = null;
-                        countSum(employee, index);
-                    }
-                });
-            })
 
+
+        function randomize() {
+            cleanUp();
+
+            _.each(vm.employees, employee => {
+
+                while(employee.totalSum !== vm.hoursPerMonth){
+                    const index = getRandomWorkingDay(employee);
+                    employee.from[index] = 8;
+                    employee.to[index] = 16;
+                    countSum(employee, index);
+                }
+
+
+                // _.each(vm.numberOfDays, (elem, index)=> {
+                //     if (!elem.isHoliday) {
+                //         employee.from[index] = 8;
+                //         employee.to[index] = 16;
+                //         countSum(employee, index);
+                //     }else {
+                //         employee.from[index] = null;
+                //         employee.to[index] = null;
+                //         countSum(employee, index);
+                //     }
+                // });
+            });
+        }
+
+        function setRandomHours(employee){
+            const maxHoursPerDay = 10;
+            const openHour = 8;
+            const closeHour = 21;
+            let open = getRandomRange(openHour, closeHour);
+            let close = getRandomRange(openHour, closeHour);
+            let duration  = close - open;
+            let possibleLeftHours = employee.totalSum - duration;
+            while(duration <= 0 || duration > maxHoursPerDay){
+                if(employee.totalSum === 0)
+                    break;
+
+            }
+
+        }
+
+
+
+        function getRandomWorkingDay(employee){
+            const numberOfDays = vm.numberOfDays.length;
+            let randomDay = getRandomInt(numberOfDays);
+          //  console.log(randomDay)
+            //if all days are holiday break
+            while(vm.numberOfDays[randomDay].isHoliday || employee.from[randomDay]){
+                randomDay = getRandomInt(numberOfDays);
+              //  console.log(randomDay)
+            }
+
+            return randomDay;
+        }
+
+        function getRandomRange(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function getRandomInt( max) {
+            return Math.floor(Math.random() * (max));
         }
 
         function changeShop(shop) {
@@ -123,10 +174,12 @@ class HomeController {
                     vm.employees = _.map(resp.data.employees, employee => {
                         return new Employee(employee.id, employee.name);
                     });
+
             })
                 .catch(err => {
                     //just for testing without database
                     setMockedObjects();
+                    vm.editable = true;
                     console.log(err);
                 });
         }
