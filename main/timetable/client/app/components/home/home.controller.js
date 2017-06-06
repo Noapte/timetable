@@ -18,6 +18,9 @@ class HomeController {
         vm.print = true;
         vm.printStyle = {'border': '0.1pt  solid #808080', 'padding': '0px', 'margin': '0px', 'text-align': 'middle'};
         vm.hoursPerMonth = 0;
+        vm.maxHoursPerDay = 10;
+        vm.openNormalDay = 8;
+        vm.closeNormalDay = 21;
 
         setDateMap();
         loadCurrentTimetableData('');
@@ -72,9 +75,9 @@ class HomeController {
                     employee.to[index] = null;
                     countSum(employee, index);
 
-                    const maxHoursPerDay = 10;
-                    const openHour = 8;
-                    const closeHour = 21;
+                    const maxHoursPerDay = vm.maxHoursPerDay;
+                    const openHour = vm.openNormalDay;
+                    const closeHour = vm.closeNormalDay;
                     let open = getRandomRange(openHour, closeHour);
                     let close = getRandomRange(openHour, closeHour);
                     let duration  = close - open;

@@ -102,6 +102,30 @@
                 {{emp.totalSum - $ctrl.hoursPerMonth }}
             </td>
         </tr>
+        <th>max h/day:
+        </th>
+        <th colspan="2"><input
+                   class="form-control"
+                   ng-model="$ctrl.maxHoursPerDay"
+                   type="number"> </input>
+        </th>
+        <th>otwarcie:
+        </th>
+        <th colspan="2"><input
+                class="form-control"
+                ng-model="$ctrl.openNormalDay"
+                type="number"> </input>
+        </th>
+
+        <th>zamknięcie:
+        </th>
+        <th colspan="2"><input
+                class="form-control"
+                ng-model="$ctrl.closeNormalDay"
+                type="number"> </input>
+        </th>
+
+
         <tr>
             <td colspan="6" style="text-align: left;padding-left:10px">Legenda:</td>
         </tr>
