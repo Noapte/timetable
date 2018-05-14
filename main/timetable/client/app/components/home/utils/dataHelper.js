@@ -31,7 +31,6 @@ function countHolidays(daysList) {
     }, 0);
 }
 
-
 function countWorkdays(daysList) {
     return daysList.reduce((previousValue, currentValue)=> {
         const val = (!isWeekend(currentValue.day)) ? previousValue + 1 : previousValue;
